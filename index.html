@@ -5,264 +5,330 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRATUS - Cabinet Pricing Calculator</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f4f7fa 0%, #e8f4f8 100%); color: #333; max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        .container { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; margin-bottom: 40px; font-weight: 600; }
-        label { display: block; margin-top: 25px; font-weight: 500; color: #34495e; font-size: 16px; }
-        select { width: 100%; padding: 15px; margin-top: 8px; border: 2px solid #e1e5e9; border-radius: 10px; background: #fff; font-size: 16px; color: #606266; transition: all 0.3s ease; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23606266' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 18px; }
-        select:focus { border-color: #409eff; box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.1); outline: none; }
-        select:disabled { background-color: #f8f9fa; cursor: not-allowed; opacity: 0.6; }
-        #result { margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%); border: 2px solid #91d5ff; border-radius: 12px; text-align: center; font-size: 22px; font-weight: bold; color: #1890ff; box-shadow: 0 10px 30px rgba(24, 144, 255, 0.2); }
-        #result.hidden { display: none; }
-        .price-breakdown { text-align: left; margin-top: 20px; font-size: 16px; }
-        .price-item { display: flex; justify-content: space-between; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px; }
-        .modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .modal-buttons { margin-top: 20px; }
-        .modal-buttons button { margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        .btn-yes { background: #27ae60; color: white; }
-        .btn-no { background: #95a5a6; color: white; }
-        .btn-yes:hover { background: #219a52; }
-        .btn-no:hover { background: #7f8c8d; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-container {
+            flex: 1;
+            max-width: 600px;
+        }
+        .image-container {
+            flex: 1;
+            margin-left: 40px;
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #34495e;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            background-color: #fff;
+            font-size: 16px;
+            color: #606266;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23606266' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            transition: border-color 0.3s;
+        }
+        select:focus {
+            border-color: #409eff;
+            outline: none;
+        }
+        select:disabled {
+            background-color: #f5f7fa;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #1890ff;
+            transition: all 0.3s;
+        }
+        #result:empty {
+            display: none;
+        }
+        /* Add some hover effects */
+        select:hover:not(:disabled) {
+            border-color: #a0cfff;
+        }
+        /* --- Logo positioning fix --- */
+        .logo-container {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+        .logo-container img {
+            width: 120px; /* small size */
+            height: auto;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🛠️ CRATUS Cabinet Pricing Calculator</h1>
-        <label for="cabinetType">1. Select Cabinet Type</label><select id="cabinetType"><option value="">-- Choose --</option></select>
-        <label for="capacity">2. Select Capacity</label><select id="capacity" disabled><option value="">-- Select Cabinet First --</option></select>
-        <label for="hvacType">3. Select HVAC Type</label><select id="hvacType" disabled><option value="">-- Select Capacity First --</option></select>
-        <div id="result" class="hidden"></div>
+    <div class="form-container">
+        <header>
+            <h1>CRATUS - Cabinet Pricing Calculator</h1>
+        </header>
+        
+        <label for="cabinetType">Select Cabinet Type:</label>
+        <select id="cabinetType">
+            <option value="">-- Select --</option>
+        </select>
+        
+        <label for="subvariant">Select Variant:</label>
+        <select id="subvariant" disabled>
+            <option value="">-- Select Cabinet Type First --</option>
+        </select>
+        
+        <label for="hvac">Select HVAC:</label>
+        <select id="hvac" disabled>
+            <option value="">-- Select Variant First --</option>
+            <option value="DC Aircon">DC Aircon</option>
+            <option value="DC Fan">DC Fan</option>
+            <option value="Heat Exchanger(HEX)">Heat Exchanger(HEX)</option>
+        </select>
+        
+        <label for="capacity" id="capacityLabel" style="display: none;">Select Capacity:</label>
+        <select id="capacity" disabled style="display: none;">
+            <option value="">-- Select --</option>
+        </select>
+        
+        <div id="result"></div>
     </div>
-
-    <!-- DC Aircon Modal (Col D) -->
-    <div id="dcAirconModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>❄️ DC Aircon Required?</h3>
-            <p>Select DC Aircon capacity:</p>
-            <select id="dcAirconCapacity"></select>
-            <div class="modal-buttons">
-                <button class="btn-yes" onclick="confirmDcAircon()">Confirm</button>
-                <button class="btn-no" onclick="cancelDcAircon()">Skip</button>
-            </div>
-        </div>
+    <div id="image-container" class="image-container" style="display:none;">
+        <img id="cabinet-image" alt="Cabinet Image" style="max-width:100%; height:auto;">
     </div>
-
-    <!-- Heat Exchanger Modal (Col E) -->
-    <div id="hexModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>🔥 Heat Exchanger Required?</h3>
-            <p>Select Heat Exchanger capacity:</p>
-            <select id="hexCapacity"></select>
-            <div class="modal-buttons">
-                <button class="btn-yes" onclick="confirmHex()">Confirm</button>
-                <button class="btn-no" onclick="cancelHex()">Skip</button>
-            </div>
-        </div>
+    <div class="logo-container">
+        <img src="CRATUS.png" alt="CRATUS by BRILLIANZ GROUP">
     </div>
-
     <script>
-        const cabinetStructure = [{"name": "Standard  Battery Cabinet", "subvariants": [{"capacity": "1000AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchager"], "dcOptions": ["1000 Watt", "1500 Watt", "2000 Watt", "3000 Watt", "600 Watt"], "hexOptions": ["120W/K", "180W/K", "200W/K", "80W/K"]}, {"capacity": "1000AH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}, {"capacity": "400AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchager"], "dcOptions": ["300 Watt"], "hexOptions": ["60W/K"]}, {"capacity": "400AH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}, {"capacity": "600AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchager"], "dcOptions": ["300 Watt", "600 Watt"], "hexOptions": ["80W/K"]}, {"capacity": "600AH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}, {"capacity": "800AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchager"], "dcOptions": ["1000 Watt", "1500 Watt", "2000 Watt", "600 Watt"], "hexOptions": ["120W/K", "180W/K", "200W/K", "80W/K"]}, {"capacity": "800AH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}]}, {"name": "Stackable Battery Cabinet", "subvariants": [{"capacity": "400AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchager"], "dcOptions": ["300 Watt"], "hexOptions": ["60W/K"]}, {"capacity": "400AH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}, {"capacity": "800AH", "requires_hvac": true, "hvacTypes": ["2 x DC Aircon", "2 x Heat Exchager"], "dcOptions": ["300 Watt"], "hexOptions": ["60W/K"]}, {"capacity": "800AH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}]}, {"name": "Integrated Power Cabinet", "subvariants": [{"capacity": "Dual Door", "requires_hvac": true, "hvacTypes": ["2 x DC Aircon", "2 x DC Fan", "2 x Heat Exchanger", "DC Aircon & Heat Exchanger", "DC Fan &  DC Aircon", "DC Fan & Heat Exchanger"], "dcOptions": ["1000 Watt", "2000 Watt", "300 Watt", "600 Watt"], "hexOptions": ["120W/K", "180W/K", "80W/K"]}, {"capacity": "Single Door", "requires_hvac": true, "hvacTypes": ["DC Aircon", "DC Fan", "Heat Exchanger"], "dcOptions": ["1000 Watt", "1500 Watt", "2000 Watt", "600 Watt"], "hexOptions": ["120W/K", "180W/K", "200W/K", "250W/K", "80W/K"]}, {"capacity": "Three Door", "requires_hvac": true, "hvacTypes": ["2 x DC Aircon", "2 x DC Fan", "2 x Heat Exchanger", "DC Aircon & Heat Exchanger", "DC Fan &  DC Aircon", "DC Fan & Heat Exchanger"], "dcOptions": [], "hexOptions": []}]}, {"name": "FTTH Cabinets", "subvariants": [{"capacity": "Outdoor FTTH (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}]}, {"name": "IP Cabinets", "subvariants": [{"capacity": "IP Router Cabinet", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchager"], "dcOptions": ["300 Watt"], "hexOptions": ["60W/K"]}, {"capacity": "Type 1", "requires_hvac": true, "hvacTypes": ["DC Aircon", "Heat Exchanger"], "dcOptions": ["1500 Watt", "2000 Watt"], "hexOptions": ["180W/K", "200W/K", "250W/K"]}, {"capacity": "Type 2", "requires_hvac": true, "hvacTypes": ["2 x DC Aircon", "2 x Heat Exchanger"], "dcOptions": ["2000 Watt", "3000 Watt"], "hexOptions": ["200W/K", "250W/K"]}, {"capacity": "Type 4", "requires_hvac": true, "hvacTypes": ["4 x DC Aircon", "4 x Heat Exchanger"], "dcOptions": ["2000 Watt", "3000 Watt"], "hexOptions": ["200W/K", "250W/K"]}]}, {"name": "Server Rack / Switch Rack", "subvariants": [{"capacity": "16 U (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}, {"capacity": "32U (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}, {"capacity": "42 U (DC Fan)", "requires_hvac": false, "hvacTypes": [], "dcOptions": [], "hexOptions": []}]}, {"name": "Theft Resistance Cabinet", "subvariants": [{"capacity": "1000 AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "DC Fan", "Heat Exchanger"], "dcOptions": ["1000 Watt", "1500 Watt", "2000 Watt", "600 Watt"], "hexOptions": ["120W/K", "180W/K", "200W/K"]}, {"capacity": "600 AH", "requires_hvac": true, "hvacTypes": ["DC Aircon", "DC Fan", "Heat Exchanger"], "dcOptions": ["1000 Watt", "300Watt", "600 Watt"], "hexOptions": ["120 W/K", "80W/K"]}]}, {"name": "Theft Resistance Integrated Cabinet", "subvariants": [{"capacity": "600 AH + 14 U Power Compartment", "requires_hvac": true, "hvacTypes": ["DC Aircon & DC Fan", "DC Fan", "Heat Exchanger & DC Fan"], "dcOptions": ["300Watt", "600 Watt"], "hexOptions": ["120 W/K", "80W/K"]}]}];
-        const basePrices = {"FTTH Cabinets|Outdoor FTTH (DC Fan)": 596.6373846432234, "IP Cabinets|IP Router Cabinet": 788.4670969298512, "IP Cabinets|Type 2": 876.2912021231679, "Integrated Power Cabinet|Dual Door": 902.2266481693708, "Integrated Power Cabinet|Single Door": 850.162840541247, "Integrated Power Cabinet|Three Door": 925.045418903432, "Server Rack / Switch Rack|16 U (DC Fan)": 363.4868248587571, "Server Rack / Switch Rack|32U (DC Fan)": 516.2545195729538, "Server Rack / Switch Rack|42 U (DC Fan)": 558.4743639544001, "Stackable Battery Cabinet|400AH": 574.3082405452681, "Stackable Battery Cabinet|400AH (DC Fan)": 567.0721788608079, "Stackable Battery Cabinet|800AH": 799.5388447232442, "Stackable Battery Cabinet|800AH (DC Fan)": 952.4451317932323, "Standard  Battery Cabinet|1000AH": 904.5162064459055, "Standard  Battery Cabinet|1000AH (DC Fan)": 814.0646038160726, "Standard  Battery Cabinet|400AH": 649.3972085167984, "Standard  Battery Cabinet|400AH (DC Fan)": 613.452912720912, "Standard  Battery Cabinet|600AH": 706.444140659871, "Standard  Battery Cabinet|600AH (DC Fan)": 653.9760355469771, "Standard  Battery Cabinet|800AH": 842.3487721414641, "Standard  Battery Cabinet|800AH (DC Fan)": 758.3445740595532, "Theft Resistance Cabinet|1000 AH": 2312.574139976275, "Theft Resistance Cabinet|600 AH": 1746.7378410438912, "Theft Resistance Integrated Cabinet|600 AH + 14 U Power Compartment": 2312.574139976275};
-        const dcAirconPrices = [["1000 Watt", 385.00000000000006], ["1500 Watt", 418.00000000000006], ["2000 Watt", 500.50000000000006], ["300 Watt", 193.05], ["3000 Watt", 610.5], ["600 Watt", 282.865]];
-        const hexPrices = [];
-        
-        let dcAirconPrice = 0;
-        let hexPrice = 0;
-        let currentCt = '';
-        let currentCap = '';
-        let currentHvac = '';
-        
-        // Event listeners
-        document.getElementById('cabinetType').addEventListener('change', updateCapacityOptions);
-        document.getElementById('capacity').addEventListener('change', updateHvacOptions);
-        document.getElementById('hvacType').addEventListener('change', handleHvacSelection);
-        
-        // Populate cabinets (Excel order)
-        cabinetStructure.forEach(type => {
+        const majorTypes = [
+            {
+                name: "Standard Battery Cabinet",
+                subvariants: ["400AH", "600AH", "800AH", "1000AH"],
+                priceIndicesAir: [2, 3, 4, 5],
+                priceIndicesFan: [6, 7, 8, 9]
+            },
+            {
+                name: "Stackable Battery Cabinet",
+                subvariants: ["400AH", "600AH", "800AH", "1000AH"],
+                priceIndicesAir: [10, 11, 12, 13],
+                priceIndicesFan: [10, 11, 12, 13]  // Assuming shared; adjust if separate
+            },
+            {
+                name: "Power Cabinet",
+                subvariants: ["Integrated Power Cabinet - Single Door", "Integrated Power Cabinet - Dual Door", "Integrated Power Cabinet- 3 Door"],
+                priceIndices: [14, 15, 16]
+            },
+            {
+                name: "FTTH Cabinet",
+                subvariants: ["NayaTel", "PTCL", "Super Net"],
+                priceIndices: [17, 18, 19]
+            },
+            {
+                name: "IP Router Cabinets",
+                subvariants: ["Type 2", "Type 1", "Type 4"],
+                priceIndices: [20, 21, 22]
+            },
+            {
+                name: "Server Rack / Switch Rack",
+                subvariants: ["42U", "36U", "16U"],
+                priceIndices: [23, 24, 25]
+            },
+            {
+                name: "Theft Resistant Cabinet Battery Cabinet",
+                subvariants: ["600 AH", "1000AH"],
+                priceIndicesAir: [26, 27],
+                priceIndicesFan: [28, 29]
+            },
+            {
+                name: "Theft Resistant Cabinet Integrated Cabinet",
+                subvariants: ["600AH + Power System"],
+                priceIndices: [30]
+            }
+        ];
+        const cabinetPrices = [0, 0, 649.3972085167984, 706.444140659871, 842.3487721414641, 904.5162064459055, 613.452912720912, 653.9760355469771, 758.3445740595532, 814.0646038160726, 574.3082405452681, 799.5388447232442, 567.0721788608079, 952.4451317932323, 850.162840541247, 902.2266481693708, 925.045418903432, 558.9856292096428, 596.6373846432234, 788.4670969298512, 876.2912021231679, NaN, NaN, 558.4743639544001, 516.2545195729538, 363.4868248587571, 1746.7378410438912, 2312.574139976275, 2312.574139976275];
+        const airconCapacities = [{ capacity: "300 Watt", price: 305.019 }, { capacity: "600 Watt", price: 446.9267 }, { capacity: "1000 Watt", price: 608.3000000000001 }, { capacity: "1500 Watt", price: 660.44 }, { capacity: "2000 Watt", price: 790.7900000000001 }, { capacity: "3000 Watt", price: 964.5899999999999 }];
+        const hexCapacities = [{ capacity: "60W/K", price: 321.53000000000003 }, { capacity: "80W/K", price: 387.574 }, { capacity: "120W/K", price: 469.26 }, { capacity: "180W/K", price: 634.3700000000001 }, { capacity: "200W/K", price: 677.82 }, { capacity: "250w/k", price: 895.0699999999999 }];
+
+        const imageMap = {
+            "Standard Battery Cabinet": "Standard Battery Cabinet.png",
+            "IP Router Cabinets": "IP Cabinet.png",
+            "Server Rack / Switch Rack": "Server Rack.png",
+            "Theft Resistant Cabinet Battery Cabinet": "Theft Resistant Cabinets.png",
+            "Stackable Battery Cabinet": "Stackable Battery Cabinet.png",
+
+
+        };
+
+        // Populate cabinet types
+        const typeSelect = document.getElementById('cabinetType');
+        majorTypes.forEach(type => {
             const option = document.createElement('option');
             option.value = type.name;
             option.textContent = type.name;
-            document.getElementById('cabinetType').appendChild(option);
+            typeSelect.appendChild(option);
         });
-        
-        function updateCapacityOptions() {
-            const ctSelect = document.getElementById('cabinetType');
-            const capSelect = document.getElementById('capacity');
-            const selectedType = ctSelect.value;
-            
-            capSelect.innerHTML = '<option value="">-- Select Capacity --</option>';
-            document.getElementById('hvacType').disabled = true;
-            clearResult();
-            
+
+        typeSelect.addEventListener('change', () => {
+            const selectedTypeName = typeSelect.value;
+            const selectedType = majorTypes.find(t => t.name === selectedTypeName);
+            const subSelect = document.getElementById('subvariant');
+            subSelect.innerHTML = '<option value="">-- Select --</option>';
             if (selectedType) {
-                const typeData = cabinetStructure.find(t => t.name === selectedType);
-                if (typeData?.subvariants) {
-                    typeData.subvariants.forEach(sub => {
-                        const option = document.createElement('option');
-                        option.value = sub.capacity;
-                        option.textContent = sub.capacity;
-                        capSelect.appendChild(option);
-                    });
-                    capSelect.disabled = false;
-                }
-            }
-        }
-        
-        function updateHvacOptions() {
-            const ct = document.getElementById('cabinetType').value;
-            const cap = document.getElementById('capacity').value;
-            const hvacSelect = document.getElementById('hvacType');
-            
-            hvacSelect.innerHTML = '<option value="">-- Select HVAC --</option>';
-            clearResult();
-            
-            if (ct && cap) {
-                const typeData = cabinetStructure.find(t => t.name === ct);
-                const subData = typeData?.subvariants.find(s => s.capacity === cap);
-                
-                if (subData?.hvacTypes?.length > 0) {
-                    subData.hvacTypes.forEach(hvacType => {
-                        const option = document.createElement('option');
-                        option.value = hvacType;
-                        option.textContent = hvacType;
-                        hvacSelect.appendChild(option);
-                    });
-                    hvacSelect.disabled = false;
-                }
-            }
-        }
-        
-        function handleHvacSelection() {
-            currentCt = document.getElementById('cabinetType').value;
-            currentCap = document.getElementById('capacity').value;
-            currentHvac = document.getElementById('hvacType').value;
-            
-            if (!currentHvac) return;
-            
-            // ✅ CHECK HVAC OPTION for DC Aircon + Heat Exchanger (Col D/E)
-            const needsDcAircon = currentHvac.toLowerCase().includes('dc aircon');
-            const needsHex = currentHvac.toLowerCase().includes('heat exchanger');
-            
-            if (needsDcAircon && needsHex) {
-                // Show DC Aircon popup FIRST
-                showDcAirconModal();
-            } else if (needsDcAircon) {
-                showDcAirconModal();
-            } else if (needsHex) {
-                showHexModal();
+                selectedType.subvariants.forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    subSelect.appendChild(option);
+                });
+                subSelect.disabled = false;
             } else {
-                calculatePrice();
+                subSelect.disabled = true;
             }
-        }
-        
-        function showDcAirconModal() {
-            const dcCapSelect = document.getElementById('dcAirconCapacity');
-            dcCapSelect.innerHTML = '';
-            
-            dcAirconPrices.forEach(([capacity, price]) => {
-                const option = document.createElement('option');
-                option.value = price;
-                option.textContent = `${capacity} ($${
-                    price.toFixed(2)
-                })`;
-                dcCapSelect.appendChild(option);
-            });
-            
-            document.getElementById('dcAirconModal').style.display = 'flex';
-        }
-        
-        function showHexModal() {
-            const hexCapSelect = document.getElementById('hexCapacity');
-            hexCapSelect.innerHTML = '';
-            
-            hexPrices.forEach(([capacity, price]) => {
-                const option = document.createElement('option');
-                option.value = price;
-                option.textContent = `${capacity} ($${
-                    price.toFixed(2)
-                })`;
-                hexCapSelect.appendChild(option);
-            });
-            
-            document.getElementById('hexModal').style.display = 'flex';
-        }
-        
-        function confirmDcAircon() {
-            dcAirconPrice = parseFloat(document.getElementById('dcAirconCapacity').value) || 0;
-            document.getElementById('dcAirconModal').style.display = 'none';
-            
-            // If Heat Exchanger also needed, show next
-            if (currentHvac.toLowerCase().includes('heat exchanger')) {
-                showHexModal();
+            document.getElementById('hvac').disabled = true;
+            hideCapacity();
+
+            // Handle image display
+            const imageContainer = document.getElementById('image-container');
+            const cabinetImg = document.getElementById('cabinet-image');
+            imageContainer.style.display = 'none';
+            const imagePath = imageMap[selectedTypeName];
+            if (imagePath) {
+                cabinetImg.src = imagePath;
+                cabinetImg.onload = () => {
+                    imageContainer.style.display = 'block';
+                };
+                cabinetImg.onerror = () => {
+                    imageContainer.style.display = 'none';
+                };
+            }
+
+            updateResult();
+        });
+
+        document.getElementById('subvariant').addEventListener('change', () => {
+            document.getElementById('hvac').disabled = false;
+            hideCapacity();
+            updateResult();
+        });
+
+        document.getElementById('hvac').addEventListener('change', () => {
+            const hvac = document.getElementById('hvac').value;
+            const capacitySelect = document.getElementById('capacity');
+            const capacityLabel = document.getElementById('capacityLabel');
+            capacitySelect.innerHTML = '<option value="">-- Select --</option>';
+            if (hvac === 'DC Aircon') {
+                airconCapacities.forEach(cap => {
+                    const option = document.createElement('option');
+                    option.value = cap.price;
+                    option.textContent = cap.capacity;
+                    capacitySelect.appendChild(option);
+                });
+                showCapacity();
+            } else if (hvac === 'Heat Exchanger(HEX)') {
+                hexCapacities.forEach(cap => {
+                    const option = document.createElement('option');
+                    option.value = cap.price;
+                    option.textContent = cap.capacity;
+                    capacitySelect.appendChild(option);
+                });
+                showCapacity();
             } else {
-                calculatePrice();
+                hideCapacity();
             }
+            updateResult();
+        });
+
+        document.getElementById('capacity').addEventListener('change', updateResult);
+
+        function showCapacity() {
+            document.getElementById('capacityLabel').style.display = 'block';
+            document.getElementById('capacity').style.display = 'block';
+            document.getElementById('capacity').disabled = false;
         }
-        
-        function cancelDcAircon() {
-            dcAirconPrice = 0;
-            document.getElementById('dcAirconModal').style.display = 'none';
-            calculatePrice();
+
+        function hideCapacity() {
+            document.getElementById('capacityLabel').style.display = 'none';
+            document.getElementById('capacity').style.display = 'none';
+            document.getElementById('capacity').disabled = true;
         }
-        
-        function confirmHex() {
-            hexPrice = parseFloat(document.getElementById('hexCapacity').value) || 0;
-            document.getElementById('hexModal').style.display = 'none';
-            calculatePrice();
-        }
-        
-        function cancelHex() {
-            hexPrice = 0;
-            document.getElementById('hexModal').style.display = 'none';
-            calculatePrice();
-        }
-        
-        function calculatePrice() {
-            const ct = currentCt || document.getElementById('cabinetType').value;
-            const cap = currentCap || document.getElementById('capacity').value;
-            
-            if (!ct || !cap) return;
-            
-            const baseKey = ct.trim() + '|' + cap.trim();
-            const basePrice = basePrices[baseKey];
-            if (!basePrice) {
-                showResult('❌ Base price not found');
+
+        function updateResult() {
+            const typeName = document.getElementById('cabinetType').value;
+            const sub = document.getElementById('subvariant').value;
+            const hvac = document.getElementById('hvac').value;
+            const capPrice = parseFloat(document.getElementById('capacity').value) || 0;
+
+            if (!typeName || !sub || !hvac) {
+                document.getElementById('result').textContent = '';
                 return;
             }
-            
-            const totalHvacPrice = dcAirconPrice + hexPrice;
-            let hvacBreakdown = [];
-            
-            if (dcAirconPrice > 0) hvacBreakdown.push(`DC Aircon: $${dcAirconPrice.toFixed(2)}`);
-            if (hexPrice > 0) hvacBreakdown.push(`Heat Exchanger: $${hexPrice.toFixed(2)}`);
-            
-            const totalPrice = basePrice + totalHvacPrice;
-            const breakdown = `
-                <div class="price-item"><span>Cabinet (${ct} ${cap})</span><span>$${
-                    basePrice.toFixed(2)
-                }</span></div>
-                ${hvacBreakdown.map(b => `<div class="price-item"><span>${b}</span></div>`).join('')}
-                <hr style="margin: 20px 0;">
-                <div class="price-item" style="font-size: 24px; color: #27ae60; background: rgba(39, 174, 96, 0.1);">
-                    <span><strong>FINAL TOTAL</strong></span><span><strong>$${
-                        totalPrice.toFixed(2)
-                    } USD</strong></span>
-                </div>
-            `;
-            
-            showResult(breakdown);
-        }
-        
-        function showResult(html) {
-            document.getElementById('result').innerHTML = `<div class="price-breakdown">${html}</div>`;
-            document.getElementById('result').classList.remove('hidden');
-        }
-        
-        function clearResult() {
-            document.getElementById('result').classList.add('hidden');
-            dcAirconPrice = 0;
-            hexPrice = 0;
+
+            const type = majorTypes.find(t => t.name === typeName);
+            const subIndex = type.subvariants.indexOf(sub);
+
+            let cabinetCol;
+            if (hvac === 'DC Fan') {
+                if (type.priceIndicesFan) {
+                    cabinetCol = type.priceIndicesFan[subIndex];
+                } else if (type.priceIndicesAir) {
+                    cabinetCol = type.priceIndicesAir[subIndex]; // fallback if no fan specific
+                } else {
+                    cabinetCol = type.priceIndices[subIndex];
+                }
+                var hvacPrice = 0;
+            } else {
+                if (type.priceIndicesAir) {
+                    cabinetCol = type.priceIndicesAir[subIndex];
+                } else {
+                    cabinetCol = type.priceIndices ? type.priceIndices[subIndex] : undefined;
+                }
+                var hvacPrice = capPrice;
+            }
+
+            if (cabinetCol === undefined) {
+                document.getElementById('result').textContent = 'Error: Invalid selection';
+                return;
+            }
+
+            const cabinetPrice = cabinetPrices[cabinetCol];
+            if (isNaN(cabinetPrice)) {
+                document.getElementById('result').textContent = 'Price not available';
+                return;
+            }
+            const total = cabinetPrice + hvacPrice;
+            document.getElementById('result').textContent = `Final Price: ${total.toFixed(2)} USD`;
         }
     </script>
 </body>
